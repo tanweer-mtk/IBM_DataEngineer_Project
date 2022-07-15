@@ -1,7 +1,7 @@
 import psycopg2 as pg2 
 import os
 from dotenv import load_dotenv
-load_dotenv('./env')
+load_dotenv()
 
 DB_NAME = os.getenv("DB_NAME")
 DB_USER = os.getenv("DB_USER")
@@ -14,16 +14,19 @@ try:
         password = DB_PASSWORD
     )
     cur = conn.cursor()
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS sales_data(
+            product_id INTEGER NOT NULL,
+            customer_id INTEGER NOT NULL,
+            price INTEGER NOT NULL,
+            quantity INTEGER NOT NULL,
+            timestamp TIMESTAMP
+)
+        ''')
+    conn.commit()
+    cur.close()
 except Exception as e:
     print(e)
 
 
-create_table= '''
-CREATE TABLE sales_data(
-    product_id INTEGER NOT NULL PRIMARY KEY,
-    customer_id INTEGER NOT NULL,
-    price INTEGER NOT NULL,
-    quantity INTEGER NOT NULL,
-    timestamp TIMESTAMP
-)
-'''
+
