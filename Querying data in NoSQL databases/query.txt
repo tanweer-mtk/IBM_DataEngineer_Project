@@ -1,0 +1,27 @@
+# import json file to mongodb
+~mongoimport  --db catalog --collection electronics --file catalog.json --jsonArray
+
+# list out all the database
+~show dbs 
+
+# List out all the collections in the database catalog
+~use catalog
+~show collections
+
+# Create an index on the field "type"
+~ db.electronics.createIndex({"type":1})
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+# Write a query to find the count of laptops
+~db.electronics.find({"type": "laptop"}).count()
+
+# Write a query to find the number of smart phones with screen size of 6 inches.
+~db.electronics.find({"type": "smart phone", "screen size":6}).count()
+
+#  Export the fields _id, "type", "model", from the 'electronics' collection into a file named electronics.csv
+~ mongoexport --db catalog --collection electronics --fields "_id, type, model" --out electronics.csv
